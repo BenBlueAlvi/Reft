@@ -91,17 +91,17 @@ public class GameplayScreen implements Screen{
 	
 		
 		
-		Player = new Entity();
+		Player = new Entity(new Human());
 		Player.abilities.add(new BasicAttack(Player));
 		Player.abilities.add(new Move(Player));
 		Player.race = new Human();
 		
 	
-		testEnm = new Entity();
+		testEnm = new Entity(new Human());
 		testEnm.name = "colton";
 		testEnm.battlePos[0] = 3;
 		testEnm.battlePos[1] = 3;
-		testEnm2 = new Entity();
+		testEnm2 = new Entity(new Human());
 		testEnm2.name = "zakiah";
 		inventoryTab = new InventoryTab();
 		mainStage.addActor(inventoryTab);

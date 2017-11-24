@@ -49,11 +49,12 @@ public class Entity {
 	
 	
 	
-	public Entity(){
+	public Entity(Race race){
 		this.name = "No one";
 		for (Slots s : Slots.values()){
 			equipment.put(s, null);
 		}
+		this.race = race;
 		
 	}
 	

@@ -322,8 +322,9 @@ public class BattleTab extends Tab{
 							
 						} else {
 							if (map[row][col].isAttackable && map[row][col].dot != null){
-								//Utils.damageEquation(player.entity, map[row][col].dot.entity, selectedAbil.getThing());
-								this.printer.print("Ow");
+								int dam = Utils.damageEquation(player.entity, map[row][col].dot.entity, selectedAbil.getThing());
+								printer.print(map[row][col].dot.entity.name + " takes " + dam + " damage!");
+								timePoints -= selectedAbil.getThing().timeCost;
 							}
 						}
 					
@@ -386,8 +387,7 @@ public class BattleTab extends Tab{
 	}
 	
 	/**
-     * Begins a battle process in the tab
-     * doesn't open the tab
+     * Calculates cover from an origin tile to a target tile
      * @param  x the upper left x value of the origin tile
      * @param  y the upper left y value of the origin tile
      * @param  x2 the upper left x value of the target tile

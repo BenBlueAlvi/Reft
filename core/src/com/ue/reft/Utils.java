@@ -22,13 +22,19 @@ public class Utils {
 	public static int damageEquation(Entity offender, Entity defender, Ability abil){
 		int damage = offender.strength;
 		int totalPers = 0;
-		damage += offender.equipment.get( Slots.MAINHAND).damage.getPoint(Utils.roll100());
-		damage += offender.equipment.get( Slots.MAINHAND).strBonus;
-		totalPers += offender.equipment.get( Slots.MAINHAND).strPerBonus;
+		if (offender.equipment.get(Slots.MAINHAND) != null){
+			damage += offender.equipment.get(Slots.MAINHAND).damage.getPoint(Utils.roll100());
+			damage += offender.equipment.get( Slots.MAINHAND).strBonus;
+			totalPers += offender.equipment.get( Slots.MAINHAND).strPerBonus;
+		}
+		
 		for (Slots s : Slots.values()){
 			if (s != Slots.MAINHAND && s != Slots.OFFHAND){
-				damage += offender.equipment.get(s).strBonus;
-				totalPers += offender.equipment.get(s).strPerBonus;
+				if (offender.equipment.get(s) != null){
+					damage += offender.equipment.get(s).strBonus;
+					totalPers += offender.equipment.get(s).strPerBonus;
+				}
+				
 			}
 		}
 		damage *= (totalPers / 100) + 1;
@@ -37,13 +43,17 @@ public class Utils {
 		
 		BodyParts bodyPartHit = defender.calcHitBodyPart();
 		
-		Item equipedItem = defender.equipment.get(bodyPartHit.slot);
+		if (defender.equipment.get(bodyPartHit.slot) != null){
+			Item equipedItem = defender.equipment.get(bodyPartHit.slot);
+			
+			int armorDamage = (int) (damage * equipedItem.absorbsion);
+			int entityDamage = (int) (damage * (1-equipedItem.absorbsion));
+			
+			defender.health -= entityDamage;
+			equipedItem.durability -= armorDamage;
+		}
 		
-		int armorDamage = (int) (damage * equipedItem.absorbsion);
-		int entityDamage = (int) (damage * (1-equipedItem.absorbsion));
-		
-		defender.health -= entityDamage;
-		equipedItem.durability -= armorDamage;
+	
 		
 		
 		return damage;
