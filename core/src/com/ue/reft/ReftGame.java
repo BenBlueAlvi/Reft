@@ -17,6 +17,7 @@ public class ReftGame extends Game {
 	final static int viewWidth = 640;
 	private final static int viewHeight = 480;
 	public static LabelStyle font;
+	static timerThread timerthread = new timerThread("timer");
 	
 	@Override
 	public void create() {
@@ -35,6 +36,10 @@ public class ReftGame extends Game {
 		setScreen(ms);
 	}
 
+	public void startTimer(){
+		timerthread.start();
+	}
+	
 	public static int getViewHeight() {
 		return viewHeight;
 	}

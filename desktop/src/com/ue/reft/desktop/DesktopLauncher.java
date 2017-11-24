@@ -9,5 +9,6 @@ public class DesktopLauncher {
 		ReftGame theGame = new ReftGame();
 		
 		LwjglApplication launcher = new LwjglApplication(theGame);
+		theGame.startTimer();
 	}
 }

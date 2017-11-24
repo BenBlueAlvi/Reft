@@ -162,6 +162,11 @@ public class GameplayScreen implements Screen{
 			}
 			
 		}
+		if (Gdx.input.isKeyJustPressed(Keys.T)){
+			long l = ReftGame.timerthread.centiSeconds;
+			String out = (l / 100.0) + " seconds running!";
+			System.out.println(out);
+		}
 		
 		//camera
 	
