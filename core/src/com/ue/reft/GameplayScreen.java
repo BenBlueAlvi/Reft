@@ -153,9 +153,11 @@ public class GameplayScreen implements Screen{
 			
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.B)){
+			System.out.println("hi");
 			if (battleTab.isOpen){
 				battleTab.close();
 			} else {
+				System.out.println("op");
 				battleTab.open(Player);
 			}
 			

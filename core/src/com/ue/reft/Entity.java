@@ -58,8 +58,9 @@ public class Entity {
 	}
 	
 	/**
-	 * Calculates which body part was hit 
-	 * @return the body part that was hit as a BodyParts
+	 * Calculates and returns a random body part, based on the hitChances of the
+	 * entity's race. 
+	 * @return the body part that was hit as a BodyParts object.
 	 */
 	
 	public BodyParts calcHitBodyPart(){
@@ -85,6 +86,25 @@ public class Entity {
 		}
 		
 		return BodyParts.values()[bodyPart];
+	}
+	
+	
+	/**
+	 * Performs a skill check for the specified skill
+	 * @param skill the skill being checked
+	 * @param dc the difficulty class of the check
+	 * @return whether the check succeeds
+	 */
+	public boolean skillCheck(Skills skill, int dc){
+		
+		int baseSkill = this.skills[skill.ordinal()];
+		
+		if (MathUtils.random((int)(baseSkill * 0.2f), (int)(baseSkill * 1.2f)) >= dc){
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 	
 

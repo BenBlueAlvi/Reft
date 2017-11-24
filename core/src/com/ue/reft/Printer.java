@@ -84,6 +84,7 @@ public class Printer extends BaseActor{
 	
 	/**
      *prints a line to the output feed
+     *Printing "" will cause the game to crash
      *@param newText the string to be output
      */
 	

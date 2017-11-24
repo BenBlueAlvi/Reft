@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Polyline;
 import com.badlogic.gdx.math.Vector2;
 import com.ue.reft.BaseActor;
 import com.ue.reft.Entity;
+import com.ue.reft.Printer;
 import com.ue.reft.ReftGame;
 import com.ue.reft.Slots;
 import com.ue.reft.Text;
@@ -40,6 +41,8 @@ public class BattleTab extends Tab{
 	
 	private Text timePointsDisp;
 	
+	private Printer printer = new Printer();
+	
 	final static int maxAbils = 10;
 	public BattleTab(){
 		super();
@@ -47,6 +50,8 @@ public class BattleTab extends Tab{
 		this.timePointsDisp = new Text("Time Remaining: " + timePoints);
 		this.timePointsDisp.setPosition(5, ReftGame.getViewHeight() - 15);
 		this.addActor(timePointsDisp);
+		this.addActor(printer);
+		printer.setPosition(ReftGame.getViewWidth()/3 + 12, 5);
 	}
 	
 	/**
@@ -117,6 +122,7 @@ public class BattleTab extends Tab{
 		for (Entity enm : e){
 			Dot d = new Dot("assets/enmDot.png");
 			d.setPosition(ReftGame.getViewWidth()/3 + 12 + enm.battlePos[0] * 16,ReftGame.getViewHeight()- enm.battlePos[1] * 16 - 55);
+			d.entity = enm;
 			this.addActor(d);
 			enms.add(d);
 		}
@@ -130,6 +136,7 @@ public class BattleTab extends Tab{
 			selectedAbil = null;
 			player.entity = p;
 			this.abilities = new  ArrayList<Container<Ability>>();
+			System.out.println("hi");
 			for (int i = 0; i < p.abilities.size(); i++){
 				Container<Ability> newContainer = new Container<Ability>(p.abilities.get(i), 10f, ReftGame.getViewHeight() -35 - (float) i * 16);
 		
@@ -141,11 +148,16 @@ public class BattleTab extends Tab{
 			}
 			this.setVisible(true);
 			isOpen = true;
+			System.out.println("hi");
+			printer.print(" ");
+			System.out.println("hi");
+	
 		}
 		
 	}
 	
 	public void close(){
+		System.out.println("hi");
 		for (Container<Ability> c : abilities){
 			c.remove();
 		}
@@ -155,6 +167,13 @@ public class BattleTab extends Tab{
 	}
 	
 	public void update(Entity p){
+		
+		//Update dot posision
+		this.map[(int) player.pos.y][(int) player.pos.x].dot = player;
+		for (Dot d : enms){
+			this.map[(int) d.pos.y][(int) d.pos.x].dot = d;
+		}
+		
 		this.timePointsDisp.setText("Timepoints remaining: " + timePoints);
 		for (int i = 0; i < abilities.size(); i++){
 			abilities.get(i).setPosition(10f, ReftGame.getViewHeight()- 35 - (float) (i- scrollOffset) * 16);
@@ -212,7 +231,7 @@ public class BattleTab extends Tab{
 		}
 		
 		
-	
+		
 		
 		
 
@@ -292,7 +311,7 @@ public class BattleTab extends Tab{
 				
 			
 		
-			//move player for walking
+			//ability calculations
 			for (int row = 0; row < map.length; row++){
 				for (int col = 0; col < map[0].length; col++){	
 					if (map[row][col].getBoundingPolygon().contains(Gdx.input.getX(),ReftGame.getViewHeight() - Gdx.input.getY()) && Gdx.input.justTouched()){
@@ -300,9 +319,11 @@ public class BattleTab extends Tab{
 							player.setPosition(ReftGame.getViewWidth()/3 + 12 + col * 16,ReftGame.getViewHeight()- row * 16 - 55);
 							walkDist -= 1;
 							timePoints -= selectedAbil.getThing().timeCost;
+							
 						} else {
 							if (map[row][col].isAttackable && map[row][col].dot != null){
-								Utils.damageEquation(player.entity, map[row][col].dot.entity, selectedAbil.getThing());
+								//Utils.damageEquation(player.entity, map[row][col].dot.entity, selectedAbil.getThing());
+								this.printer.print("Ow");
 							}
 						}
 					

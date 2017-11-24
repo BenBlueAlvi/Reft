@@ -24,7 +24,7 @@ public class BasicAttack extends Ability{
 	public void useOn(Entity target){
 		Item usedWeapon = owner.equipment.get(Slots.MAINHAND);
 		if (owner.stamina > usedWeapon.cost){
-			Utils.damageEquation(owner, target, Slots.MAINHAND);
+			Utils.damageEquation(owner, target, this);
 		} else {
 			
 		}
