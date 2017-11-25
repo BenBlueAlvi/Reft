@@ -2,13 +2,13 @@ package com.ue.reft;
 
 import java.util.Timer;
 
-public class timerThread implements Runnable {
+public class TimerThread implements Runnable {
 	
 	Thread t;
 	String threadName;
 	int centiSeconds;
 
-	public timerThread(String name) {
+	public TimerThread(String name) {
 		this.threadName = name;
 	}
 
