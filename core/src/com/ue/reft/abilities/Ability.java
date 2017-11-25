@@ -7,7 +7,7 @@ import com.ue.reft.Utils.DamageCurve;
 
 public abstract class Ability {
 	
-	public Skills score;
+
 	public Entity owner;
 	public String name;
 	public Ability[] prerequisites;

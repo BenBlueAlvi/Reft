@@ -40,6 +40,9 @@ public class BattleTab extends Tab{
 	private int timePoints = 10;
 	
 	private Text timePointsDisp;
+	private Text healthDisp;
+	private Text manaDisp;
+	private Text staminaDisp;
 	
 	private static Printer printer = new Printer(9, false);
 	
@@ -50,6 +53,21 @@ public class BattleTab extends Tab{
 		this.timePointsDisp = new Text("Time Remaining: " + timePoints);
 		this.timePointsDisp.setPosition(5, ReftGame.getViewHeight() - 15);
 		this.addActor(timePointsDisp);
+		
+		this.healthDisp = new Text("Health: ", Color.RED);
+		this.healthDisp.setPosition(225, ReftGame.getViewHeight() - 15);
+		this.addActor(healthDisp);
+		
+		this.manaDisp = new Text("Mana: ", Color.SKY);
+		this.manaDisp.setPosition(325, ReftGame.getViewHeight() - 15);
+		this.addActor(manaDisp);
+		
+		this.staminaDisp = new Text("Stamina: ", Color.YELLOW);
+		this.staminaDisp.setPosition(425, ReftGame.getViewHeight() - 15);
+		this.addActor(staminaDisp);
+		
+		
+		
 		this.addActor(printer);
 		printer.setPosition(ReftGame.getViewWidth()/3 + 12, 5);
 	}
@@ -119,6 +137,7 @@ public class BattleTab extends Tab{
 	public void beginBattle(Character[][] map, Entity p, Entity...e){
 		setMap(processMap(map));
 		player.setPosition(ReftGame.getViewWidth()/3 + 12 + p.battlePos[0] * 16,ReftGame.getViewHeight()- p.battlePos[1] * 16 - 55 + 13);
+		player.entity = p;
 		for (Entity enm : e){
 			Dot d = new Dot("assets/enmDot.png");
 			d.setPosition(ReftGame.getViewWidth()/3 + 12 + enm.battlePos[0] * 16,ReftGame.getViewHeight()- enm.battlePos[1] * 16 - 55 + 13);
@@ -173,6 +192,10 @@ public class BattleTab extends Tab{
 		}
 		
 		this.timePointsDisp.setText("Timepoints remaining: " + timePoints);
+		this.healthDisp.setText("Health: " + player.entity.health);
+		this.manaDisp.setText("Mana: " + player.entity.mana);
+		this.staminaDisp.setText("Stamina: " + player.entity.stamina);
+		
 		for (int i = 0; i < abilities.size(); i++){
 			abilities.get(i).setPosition(10f, ReftGame.getViewHeight()- 35 - (float) (i- scrollOffset) * 16);
 			if (abilities.get(i).getY() < 5 || abilities.get(i).getY() > ReftGame.getViewHeight()- 35){
@@ -402,19 +425,19 @@ public class BattleTab extends Tab{
 	private int calculateCoverFrom(float x, float y, float x2, float y2){
 		int cover = 0;
 		//lower left
-		if (!isTileVisableFrom(x,y,x2,y2)){
+		if (!isTileVisableFrom(x + 1,y + 1,x2 + 1,y2 + 1)){
 			cover += 1;
 		}
 		//lower right
-		if (!isTileVisableFrom(x + 16,y,x2+16,y2)){
+		if (!isTileVisableFrom(x + 15,y,x2+15,y2+1)){
 			cover += 1;
 		}
 		//upper right
-		if (!isTileVisableFrom(x + 16,y+16,x2+16,y2+16)){
+		if (!isTileVisableFrom(x + 15,y+15,x2+15,y2+15)){
 			cover += 1;
 		}
 		//upper left
-		if (!isTileVisableFrom(x,y+16,x2,y2+16)){
+		if (!isTileVisableFrom(x+1,y+15,x2+1,y2+15)){
 			cover += 1;
 		}
 		
@@ -440,7 +463,7 @@ public class BattleTab extends Tab{
 	}
 	
 	public static void scoll(int amount){
-		printer.scrolled += 1;
+		printer.scrolled += amount;
 	}
 	
 }
