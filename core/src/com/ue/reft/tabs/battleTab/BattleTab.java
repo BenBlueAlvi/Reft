@@ -75,7 +75,7 @@ public class BattleTab extends Tab{
 		for (int row = 0; row < map.length; row++){
 			for (int col = 0; col < map[0].length; col++){
 			
-				map[row][col].setPosition(ReftGame.getViewWidth()/3 + 12 + col * 16,ReftGame.getViewHeight()- row * 16 - 55);
+				map[row][col].setPosition(ReftGame.getViewWidth()/3 + 12 + col * 16,ReftGame.getViewHeight()- row * 16 - 55 + 13);
 				this.addActor(map[row][col]);
 			}
 		}
@@ -118,10 +118,10 @@ public class BattleTab extends Tab{
      */
 	public void beginBattle(Character[][] map, Entity p, Entity...e){
 		setMap(processMap(map));
-		player.setPosition(ReftGame.getViewWidth()/3 + 12 + p.battlePos[0] * 16,ReftGame.getViewHeight()- p.battlePos[1] * 16 - 55);
+		player.setPosition(ReftGame.getViewWidth()/3 + 12 + p.battlePos[0] * 16,ReftGame.getViewHeight()- p.battlePos[1] * 16 - 55 + 13);
 		for (Entity enm : e){
 			Dot d = new Dot("assets/enmDot.png");
-			d.setPosition(ReftGame.getViewWidth()/3 + 12 + enm.battlePos[0] * 16,ReftGame.getViewHeight()- enm.battlePos[1] * 16 - 55);
+			d.setPosition(ReftGame.getViewWidth()/3 + 12 + enm.battlePos[0] * 16,ReftGame.getViewHeight()- enm.battlePos[1] * 16 - 55 + 13);
 			d.entity = enm;
 			this.addActor(d);
 			enms.add(d);
@@ -261,7 +261,7 @@ public class BattleTab extends Tab{
 			
 			for (Tile t : tilesInRange){
 				
-				if (this.isTileVisableFrom(player.center.x, player.center.y, t.center.x, t.center.y)){
+				if (this.calculateCoverFrom(map[(int) player.pos.y][(int) player.pos.x].getX(), map[(int) player.pos.y][(int) player.pos.x].getY(), t.getX(),t.getY()) < 4){
 					if (selectedAbil.getThing().name == "Move"){
 						
 				
@@ -314,13 +314,13 @@ public class BattleTab extends Tab{
 				for (int col = 0; col < map[0].length; col++){	
 					if (map[row][col].getBoundingPolygon().contains(Gdx.input.getX(),ReftGame.getViewHeight() - Gdx.input.getY()) && Gdx.input.justTouched()){
 						if (selectedAbil.getThing().name == "Move" && map[row][col].isMoveable && map[row][col].isStandable){
-							player.setPosition(ReftGame.getViewWidth()/3 + 12 + col * 16,ReftGame.getViewHeight()- row * 16 - 55);
+							player.setPosition(ReftGame.getViewWidth()/3 + 12 + col * 16,ReftGame.getViewHeight()- row * 16 - 55 + 13);
 							walkDist -= 1;
 							timePoints -= selectedAbil.getThing().timeCost;
 							
 						} else {
 							if (map[row][col].isAttackable && map[row][col].dot != null){
-								int dam = Utils.damageEquation(player.entity, map[row][col].dot.entity, selectedAbil.getThing());
+								int dam = Utils.damageEquation(player.entity, map[row][col].dot.entity, calculateCoverFrom(map[(int) player.pos.y][(int) player.pos.y].getX(), map[(int) player.pos.y][(int) player.pos.y].getY(), map[row][col].getX(), map[row][col].getY()), selectedAbil.getThing());
 							
 								printer.print(map[row][col].dot.entity.name + " takes " + dam + " damage!");
 								timePoints -= selectedAbil.getThing().timeCost;
@@ -363,9 +363,14 @@ public class BattleTab extends Tab{
 		
 
 		boxMaker.end();*/
-		Utils.DrawList(5, 5, ReftGame.getViewWidth()/3 - 5, ReftGame.getViewHeight() -32, boxMaker);
+		Utils.DrawList(5, ReftGame.getViewHeight()- (maxMapY - 1) * 16 - 55 + 13, ReftGame.getViewWidth()/3 - 5, maxMapY * 16, boxMaker);
+		boxMaker.begin(ShapeType.Line);
+		boxMaker.rect(ReftGame.getViewWidth()/3 + 12 - 1, ReftGame.getViewHeight() - 55 + 13 + 15 + 2, maxMapX * 16 + 3, -maxMapY * 16  - 3);
+		boxMaker.rect(5, ReftGame.getViewHeight()- (maxMapY - 1) * 16 - 55 + 13, ReftGame.getViewWidth()/3 - 5, -200);
 		
+	
 		
+		boxMaker.end();
 	}
 	
 	private boolean isTileVisableFrom(float x, float y, float x2, float y2){
@@ -380,6 +385,7 @@ public class BattleTab extends Tab{
 		
 			
 		}
+		
 		return true;
 		
 		
@@ -387,27 +393,27 @@ public class BattleTab extends Tab{
 	
 	/**
      * Calculates cover from an origin tile to a target tile
-     * @param  x the upper left x value of the origin tile
-     * @param  y the upper left y value of the origin tile
-     * @param  x2 the upper left x value of the target tile
-     * @param  y2 the upper left y value of the target tile
+     * @param  x the lower left x value of the origin tile
+     * @param  y the lower left y value of the origin tile
+     * @param  x2 the lower left x value of the target tile
+     * @param  y2 the lower left y value of the target tile
      * @return cover as an integer, with 4 being full cover and 0 being no cover
      */
 	private int calculateCoverFrom(float x, float y, float x2, float y2){
 		int cover = 0;
-		//Upper left
+		//lower left
 		if (!isTileVisableFrom(x,y,x2,y2)){
 			cover += 1;
 		}
-		//upper right
+		//lower right
 		if (!isTileVisableFrom(x + 16,y,x2+16,y2)){
 			cover += 1;
 		}
-		//lower right
+		//upper right
 		if (!isTileVisableFrom(x + 16,y+16,x2+16,y2+16)){
 			cover += 1;
 		}
-		//lower left
+		//upper left
 		if (!isTileVisableFrom(x,y+16,x2,y2+16)){
 			cover += 1;
 		}

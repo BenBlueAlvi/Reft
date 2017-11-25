@@ -19,8 +19,11 @@ public class Dot extends BaseActor{
 	public void act(float dt){
 		super.act(dt);
 		this.pos.x = (this.getX() - ReftGame.getViewWidth()/3 - 12)/16;
-		this.pos.y = -((this.getY() + 55 - ReftGame.getViewHeight())/16);
-	
+		this.pos.y = -((this.getY() + 55 - ReftGame.getViewHeight() - 13)/16);
+		
+		
+		
+		
 	}
 	
 	public Tile[] getAdjTiles(Tile[][] map){

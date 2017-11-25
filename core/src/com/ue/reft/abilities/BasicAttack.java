@@ -14,7 +14,7 @@ public class BasicAttack extends Ability{
 	public BasicAttack(Entity owner) {
 		super(owner);
 	
-		this.range = 2;
+		this.range = 100;
 		this.AOE = 0;
 		this.name = "Attack";
 		this.timeCost = 1;
@@ -24,7 +24,7 @@ public class BasicAttack extends Ability{
 	public void useOn(Entity target){
 		Item usedWeapon = owner.equipment.get(Slots.MAINHAND);
 		if (owner.stamina > usedWeapon.cost){
-			Utils.damageEquation(owner, target, this);
+		
 		} else {
 			
 		}

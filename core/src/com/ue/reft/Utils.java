@@ -19,7 +19,8 @@ public class Utils {
 	}
 	
 	
-	public static int damageEquation(Entity offender, Entity defender, Ability abil){
+	public static int damageEquation(Entity offender, Entity defender, int cover, Ability abil){
+		System.out.println(cover);
 		int damage = offender.strength;
 		int totalPers = 0;
 		if (offender.equipment.get(Slots.MAINHAND) != null){

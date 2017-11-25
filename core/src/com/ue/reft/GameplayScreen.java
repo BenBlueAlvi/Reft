@@ -57,7 +57,7 @@ public class GameplayScreen implements Screen{
 			{w,w,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,w, w,w,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,w},
 			{w,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,w, w,w,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,w},
 			{w,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,w, w,w,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,w},
-			{w,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,w, w,w,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,w},
+			{w,f,f,f,f,w,f,f,f,f,f,f,f,f,f,f,f,f,w, w,w,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,w},
 			{w,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,w, w,w,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,w},
 			{w,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,w, w,w,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,w},
 			{w,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,w, w,w,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,w},
