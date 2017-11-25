@@ -7,6 +7,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.ue.reft.commands.CommandList;
 import com.ue.reft.commands.Travel;
 import com.ue.reft.tabs.InventoryTab;
+import com.ue.reft.tabs.battleTab.BattleTab;
 import com.ue.reft.world.World;
 
 public class InputProcess implements InputProcessor{
@@ -55,7 +56,8 @@ public class InputProcess implements InputProcessor{
 	@Override
 	public boolean scrolled(int amount) {
 		
-		Printer.scrolled += amount;
+		GameplayScreen.printer.scrolled += amount;
+		BattleTab.scoll(amount);
 		InventoryTab.scroll(amount);
 		
 		return false;

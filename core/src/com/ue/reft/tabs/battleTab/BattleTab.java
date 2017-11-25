@@ -41,7 +41,7 @@ public class BattleTab extends Tab{
 	
 	private Text timePointsDisp;
 	
-	private Printer printer = new Printer();
+	private static Printer printer = new Printer(9, false);
 	
 	final static int maxAbils = 10;
 	public BattleTab(){
@@ -148,9 +148,7 @@ public class BattleTab extends Tab{
 			}
 			this.setVisible(true);
 			isOpen = true;
-			System.out.println("hi");
-			printer.print(" ");
-			System.out.println("hi");
+		
 	
 		}
 		
@@ -323,6 +321,7 @@ public class BattleTab extends Tab{
 						} else {
 							if (map[row][col].isAttackable && map[row][col].dot != null){
 								int dam = Utils.damageEquation(player.entity, map[row][col].dot.entity, selectedAbil.getThing());
+							
 								printer.print(map[row][col].dot.entity.name + " takes " + dam + " damage!");
 								timePoints -= selectedAbil.getThing().timeCost;
 							}
@@ -432,6 +431,10 @@ public class BattleTab extends Tab{
 		}
 		
 		return tiles;
+	}
+	
+	public static void scoll(int amount){
+		printer.scrolled += 1;
 	}
 	
 }

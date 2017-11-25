@@ -56,7 +56,7 @@ public class Utils {
 	
 		
 		
-		return damage;
+		return MathUtils.random(1, 3);
 		
 	}
 	

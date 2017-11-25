@@ -14,14 +14,11 @@ public class TimerThread implements Runnable {
 
 	@Override
 	public void run() {
-		System.out.println("Running timer thread...");
 		while(true){
 			try {
 				Thread.sleep(10);
 				this.centiSeconds++;
-				if(centiSeconds % 100 == 0){
-					System.out.println(centiSeconds / 100);
-				}
+				
 			} catch (InterruptedException e) {
 				System.out.println("Thread " + threadName + " interrupted.");
 				e.printStackTrace();

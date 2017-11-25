@@ -25,7 +25,8 @@ public class Printer extends BaseActor{
 	
 	
 	private static int maxCharsPerLine = 79;
-	private static int maxLines = 25;
+	//private static int maxLines = 25;
+	private int maxLines;
 	private static int maxSavedLines = 50;
 	
 	public ArrayList<Label> lines;
@@ -34,7 +35,7 @@ public class Printer extends BaseActor{
 	
 	public ArrayList<String> outputs;
 
-	public static int scrolled;
+	public int scrolled;
 	
 	private int commandDepth = 1;
 	private int commandIndex;
@@ -45,10 +46,11 @@ public class Printer extends BaseActor{
 
 	
 	
-	public Printer() {
-		
-		
+	public Printer(int maxLines, boolean showInputLine) {
 		super("assets/null.png");
+		this.maxLines = maxLines;
+		
+		
 		
 
 		
@@ -62,10 +64,12 @@ public class Printer extends BaseActor{
 		
 		for (int i = 0; i < maxLines; i ++){
 			Label l = new Label("", ReftGame.font);
-			l.setPosition(5 , ReftGame.getViewHeight() - l.getHeight() - i*16 - 16);
-			System.out.println(l.getHeight());
+			l.setPosition(5 , l.getHeight() + i*16 + 16 + 32 + 5);
+		
 			this.addActor(l);
 			lines.add(l);
+			outputs.add("");
+			
 		}
 		
 		for (int y = 0; y < 7; y ++){
@@ -78,6 +82,9 @@ public class Printer extends BaseActor{
 				options.add(o);
 			}
 		}
+		
+		
+		inputLine.setVisible(showInputLine);
 		
 		
 	}
@@ -153,9 +160,10 @@ public class Printer extends BaseActor{
 	public void act(float dt){
 		super.act(dt);
 		scrolled = MathUtils.clamp(scrolled, 1, outputs.size() - maxLines);
+	
 		for (int i = 0; i < maxLines; i ++){
 			if (i + scrolled < outputs.size() && i + scrolled > 0){
-				lines.get(i).setText(outputs.get(i + scrolled));
+				lines.get(lines.size() -1 - i).setText(outputs.get(i + scrolled));
 			}
 			
 		}
@@ -277,5 +285,5 @@ public class Printer extends BaseActor{
 	
 	
 	
-	public static Printer printer = new Printer();
+	
 }

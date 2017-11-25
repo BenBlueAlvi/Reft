@@ -35,7 +35,7 @@ public class GameplayScreen implements Screen{
 	public Stage mainStage;
 	public Stage uiStage;
 
-	private Printer printer;
+	public static Printer printer = new Printer(25, true);
 	public static InputProcess inputProcess;
 	private Entity Player;
 	private Entity testEnm;
@@ -79,7 +79,7 @@ public class GameplayScreen implements Screen{
 		mainStage = new Stage();
 		uiStage = new Stage();
 
-		mainStage.addActor(Printer.printer);
+		mainStage.addActor(printer);
 
 		inputProcess = new InputProcess();
 		
@@ -107,7 +107,7 @@ public class GameplayScreen implements Screen{
 		mainStage.addActor(inventoryTab);
 		battleTab = new BattleTab();
 		mainStage.addActor(battleTab);
-		battleTab.setMap(battleTab.processMap(map));
+	
 		
 		
 		Player.battlePos[0] = 4;
@@ -120,7 +120,7 @@ public class GameplayScreen implements Screen{
 		theWorld = new World();
 		theWorld.print();
 		for (int i = 0; i < 40; i++){
-			Printer.printer.print(Integer.toString(i));
+			printer.print(Integer.toString(i));
 		}
 	
 
@@ -134,7 +134,7 @@ public class GameplayScreen implements Screen{
 		uiStage.act();
 	
 		
-		Printer.printer.getWorldInput(Player, theWorld);
+		printer.getWorldInput(Player, theWorld);
 		
 		
 		
@@ -153,11 +153,11 @@ public class GameplayScreen implements Screen{
 			
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.B)){
-			System.out.println("hi");
+		
 			if (battleTab.isOpen){
 				battleTab.close();
 			} else {
-				System.out.println("op");
+				
 				battleTab.open(Player);
 			}
 			

@@ -1,6 +1,7 @@
 package com.ue.reft.world;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.ue.reft.GameplayScreen;
 import com.ue.reft.Printer;
 
 public class World {
@@ -42,7 +43,7 @@ public class World {
 		x = MathUtils.clamp(x, 0, xSize);
 		y = MathUtils.clamp(y, 0, ySize);
 
-		Printer.printer.print(map[y][x].desc);
+		GameplayScreen.printer.print(map[y][x].desc);
 	}
 	
 	
