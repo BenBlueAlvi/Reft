@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Polyline;
 import com.badlogic.gdx.math.Vector2;
 import com.ue.reft.BaseActor;
 import com.ue.reft.Entity;
+import com.ue.reft.Pos;
 import com.ue.reft.Printer;
 import com.ue.reft.ReftGame;
 import com.ue.reft.Slots;
@@ -390,22 +391,28 @@ public class BattleTab extends Tab{
 			//ability calculations
 			for (int row = 0; row < map.length; row++){
 				for (int col = 0; col < map[0].length; col++){	
-					if (map[row][col].getBoundingPolygon().contains(Gdx.input.getX(),ReftGame.getViewHeight() - Gdx.input.getY()) && Gdx.input.justTouched()){
-						if (selectedAbil.getThing().name == "Move" && map[row][col].isMoveable && map[row][col].isStandable){
-							player.setPosition(ReftGame.getViewWidth()/3 + 12 + col * 16,ReftGame.getViewHeight()- row * 16 - 55 + 13);
-							walkDist -= 1;
-							timePoints -= selectedAbil.getThing().timeCost;
-							
-						} else {
-							if (map[row][col].isAttackable && map[row][col].dot != null){
-								int dam = Utils.damageEquation(player.entity, map[row][col].dot.entity, calculateCoverFrom(map[(int) player.pos.y][(int) player.pos.y].getX(), map[(int) player.pos.y][(int) player.pos.y].getY(), map[row][col].getX(), map[row][col].getY()), selectedAbil.getThing());
-							
-								printer.print(map[row][col].dot.entity.name + " takes " + dam + " damage!");
+					if (map[row][col].getBoundingPolygon().contains(Gdx.input.getX(),ReftGame.getViewHeight() - Gdx.input.getY())){
+						
+						Pos[] poses = selectedAbil.getThing().telegraph.getHitPositions(col, row);
+						for (int i = 0; i < poses.length; i++){
+							map[(int) poses[i].y][(int) poses[i].x].setTelegraph(true);
+						}
+						
+						if (Gdx.input.justTouched()){
+							if (selectedAbil.getThing().name == "Move" && map[row][col].isMoveable && map[row][col].isStandable){
+								player.setPosition(ReftGame.getViewWidth()/3 + 12 + col * 16,ReftGame.getViewHeight()- row * 16 - 55 + 13);
+								walkDist -= 1;
 								timePoints -= selectedAbil.getThing().timeCost;
+								
+							} else {
+								if (map[row][col].isAttackable && map[row][col].dot != null){
+									int dam = Utils.damageEquation(player.entity, map[row][col].dot.entity, calculateCoverFrom(map[(int) player.pos.y][(int) player.pos.y].getX(), map[(int) player.pos.y][(int) player.pos.y].getY(), map[row][col].getX(), map[row][col].getY()), selectedAbil.getThing());
+								
+									printer.print(map[row][col].dot.entity.name + " takes " + dam + " damage!");
+									timePoints -= selectedAbil.getThing().timeCost;
+								}
 							}
 						}
-					
-						
 						
 					}
 				}

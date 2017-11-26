@@ -3,6 +3,7 @@ package com.ue.reft.abilities;
 import com.ue.reft.Entity;
 import com.ue.reft.Skills;
 import com.ue.reft.Sources;
+import com.ue.reft.Telegraph;
 import com.ue.reft.Utils.DamageCurve;
 
 public abstract class Ability {
@@ -18,6 +19,8 @@ public abstract class Ability {
 	public DamageCurve damage;
 	public int xp;
 	public int timeCost;
+	
+	public Telegraph telegraph;
 	
 	public Ability(Entity owner, Sources type){
 		this.owner = owner;

@@ -5,15 +5,15 @@ public enum Skills {
 	
 	
 	//learning skills
-	intuition, reading, literacy, perception,
+	intuition, reading, perception,
 	//crafting skills
 	smithing, tinkering, crafting, runecrafting, alchemy, brewing,
 	//resource skills
-	herbology, geology, appraisal, arcana, occult,
+	herbology, geology, appraisal, arcana, occult, biology,
 	//social skills
 	intimitation, persuation, improv,
 	//travel skills
-	horseback, climbing, finesse,
+	climbing, finesse,
 	
 	
 	

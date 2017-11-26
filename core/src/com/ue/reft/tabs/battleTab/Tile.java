@@ -10,10 +10,12 @@ public abstract class Tile extends BaseActor{
 	public boolean isMoveable;
 	public boolean isStandable;
 	public boolean isSolid;
+	public boolean isHit;
 	public Dot dot;
 	public char id;
 	private Color walkHighlight = new Color(0xadccff);
 	private Color moveHighlight = new Color(0xbeeeff);
+	private Color hitHighlight = Color.ORANGE;
 	private Color attackHighlight = Color.RED;
 
 	public Tile(String path) {
@@ -35,6 +37,9 @@ public abstract class Tile extends BaseActor{
 			if (!isAttackable){
 				this.setColor(Color.WHITE);
 			}
+			if (!isHit){
+				this.setColor(Color.WHITE);
+			}
 			
 		}
 		
@@ -53,10 +58,28 @@ public abstract class Tile extends BaseActor{
 			if (!isMoveable){
 				this.setColor(Color.WHITE);
 			}
+			if (!isHit){
+				this.setColor(Color.WHITE);
+			}
 			
 		}
 		
 		this.isAttackable = attackAble;
+	}
+	
+	public void setTelegraph(boolean ye){
+		if (ye){
+			this.setColor(hitHighlight);
+		} else {
+			if (!isMoveable){
+				this.setColor(Color.WHITE);
+			}
+			if (!isAttackable){
+				this.setColor(Color.WHITE);
+			}
+			
+		}
+		this.isHit = ye;
 	}
 	
 
