@@ -19,8 +19,9 @@ public abstract class Ability {
 	public int xp;
 	public int timeCost;
 	
-	public Ability(Entity owner){
+	public Ability(Entity owner, Sources type){
 		this.owner = owner;
+		this.type = type;
 		this.name = "";
 	}
 	
@@ -37,5 +38,7 @@ public abstract class Ability {
 	public String toString(){
 		return this.name;
 	}
+	
+	
 	
 }

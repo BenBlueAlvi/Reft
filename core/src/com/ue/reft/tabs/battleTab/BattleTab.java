@@ -33,6 +33,8 @@ public class BattleTab extends Tab{
 	private Dot player = new Dot("assets/playerDot.png");
 	private ArrayList<Dot> enms = new ArrayList<Dot>(); 
 	private int scrollOffset;
+	private int mapOffsetX;
+	private int mapOffsetY;
 	final int maxMapX = 25;
 	final int maxMapY = 15;
 	private int walkDist = 0;
@@ -43,6 +45,10 @@ public class BattleTab extends Tab{
 	private Text healthDisp;
 	private Text manaDisp;
 	private Text staminaDisp;
+	
+	private Text abilDesc;
+	private Text abilCost;
+	private Text abilTimeCost;
 	
 	private static Printer printer = new Printer(9, false);
 	
@@ -66,6 +72,17 @@ public class BattleTab extends Tab{
 		this.staminaDisp.setPosition(425, ReftGame.getViewHeight() - 15);
 		this.addActor(staminaDisp);
 		
+		this.abilDesc = new Text("");
+		this.abilDesc.setPosition(10, 96);
+		this.addActor(abilDesc);
+		
+		this.abilTimeCost = new Text("");
+		this.abilTimeCost.setPosition(10, 64);
+		this.addActor(abilTimeCost);
+		
+		this.abilCost = new Text("");
+		this.abilCost.setPosition(10, 32);
+		this.addActor(abilCost);
 		
 		
 		this.addActor(printer);
@@ -191,11 +208,13 @@ public class BattleTab extends Tab{
 			this.map[(int) d.pos.y][(int) d.pos.x].dot = d;
 		}
 		
+		//updates text
 		this.timePointsDisp.setText("Timepoints remaining: " + timePoints);
 		this.healthDisp.setText("Health: " + player.entity.health);
 		this.manaDisp.setText("Mana: " + player.entity.mana);
 		this.staminaDisp.setText("Stamina: " + player.entity.stamina);
 		
+		//make sure abilities go invis due to scoll
 		for (int i = 0; i < abilities.size(); i++){
 			abilities.get(i).setPosition(10f, ReftGame.getViewHeight()- 35 - (float) (i- scrollOffset) * 16);
 			if (abilities.get(i).getY() < 5 || abilities.get(i).getY() > ReftGame.getViewHeight()- 35){
@@ -208,17 +227,42 @@ public class BattleTab extends Tab{
 		}
 		
 		//scrolling
-		if (Gdx.input.isKeyJustPressed(Keys.UP)){
-			scrollOffset += 1;
-		} 
-		if (Gdx.input.isKeyJustPressed(Keys.DOWN)){
-			scrollOffset -= 1;
-		} 
-		
 		if (scrollOffset < 0){
 			scrollOffset = 0;
 		} else if (scrollOffset > abilities.size() - maxAbils && abilities.size() > maxAbils){
 			scrollOffset = abilities.size() - maxAbils;
+		}
+		
+		
+		
+		//map scrolling
+		if (player.pos.x > maxMapX + mapOffsetX){
+			mapOffsetX += 1;
+		}
+		else if (player.pos.x < 0 + mapOffsetX){
+			mapOffsetX -= 1;
+		}
+		if (player.pos.y < 0 + mapOffsetY){
+			mapOffsetY -= 1;
+		}
+		else if (player.pos.y > maxMapY + mapOffsetY){
+			mapOffsetY += 1;
+		}
+		
+		System.out.println(mapOffsetX);
+		
+		//map scrolling update
+		for (int row = 0; row < map.length; row++){
+			for (int col = 0; col < map[0].length; col++){	
+		
+				map[row][col].setPosition(ReftGame.getViewWidth()/3 + 12 + (col + mapOffsetX) * 16,ReftGame.getViewHeight()- (row + mapOffsetY) * 16 - 55 + 13);
+				if (map[row][col].getX() < ReftGame.getViewWidth()/3 + 12 || map[row][col].getX() > ReftGame.getViewWidth()/3 + 12 + 16 * maxMapX || 
+						map[row][col].getY() < ReftGame.getViewHeight() - 55 + 13 || map[row][col].getY() > ReftGame.getViewHeight()- (maxMapY) * 16 - 55 + 13){
+					map[row][col].setVisible(true);
+				} else {
+					map[row][col].setVisible(false);
+				}
+			}
 		}
 		
 		
@@ -227,7 +271,7 @@ public class BattleTab extends Tab{
 			if (c.getBoundingPolygon().contains(Gdx.input.getX(),ReftGame.getViewHeight() - Gdx.input.getY())){
 	
 				if (Gdx.input.justTouched()){
-					if (selectedAbil == c){
+					if (selectedAbil == c ){
 			
 						selectedAbil = null;
 					} else {
@@ -237,7 +281,7 @@ public class BattleTab extends Tab{
 				}
 			}
 			c.title.setColor(Color.WHITE);
-			if (c.getThing().timeCost > this.timePoints){
+			if (c.getThing().timeCost > this.timePoints || c.getThing().cost > player.entity.getAmountOf(c.getThing().type)){
 				c.title.setColor(Color.LIGHT_GRAY);
 			}
 		}
@@ -261,8 +305,13 @@ public class BattleTab extends Tab{
 	private void playerTurn(){
 		if (selectedAbil != null){
 			
+			this.abilCost.setText("Cost: " + selectedAbil.getThing().cost + " " + selectedAbil.getThing().type.useAbv);
+			this.abilTimeCost.setText("Time Cost: " + selectedAbil.getThing().timeCost);
+			this.abilDesc.setText(selectedAbil.getThing().name);
+			
 			selectedAbil.title.setColor(Color.ROYAL);
 			
+			//calculate tiles in range
 			if (selectedAbil.getThing().name.equals("Move")){
 				tilesInRange = this.getTilesInRange(player.center.x, player.center.y, walkDist * 16);
 				System.out.println(walkDist);
@@ -281,6 +330,8 @@ public class BattleTab extends Tab{
 					
 				}
 			}
+			
+			//highlight tiles
 			
 			for (Tile t : tilesInRange){
 				
@@ -307,9 +358,14 @@ public class BattleTab extends Tab{
 					}
 				}
 				for (Tile t : player.getAdjTiles(map)){
-					t.setMoveHighlight(true);
+					if (this.isTileVisableFrom(t.center.x, t.center.y, player.center.x, player.center.y)){
+						t.setMoveHighlight(true);
+					}
+					
 				}
 			}
+			
+			//remove other highlights
 			
 			if (selectedAbil.getThing().name == "Move"){
 				for (int row = 0; row < map.length; row++){
@@ -367,6 +423,9 @@ public class BattleTab extends Tab{
 				}
 			}
 			
+			this.abilCost.setText("");
+			this.abilDesc.setText("");
+			this.abilTimeCost.setText("");
 		}
 	}
 	

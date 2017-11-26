@@ -108,6 +108,18 @@ public class Entity {
 		
 	}
 	
+	public int getAmountOf(Sources s){
+		switch(s){
+		case Lifeforce:
+			return this.stamina;
+		case Soul:
+			return this.mana;
+		}
+		return 0;
+		
+		
+	}
+	
 
 	
 	
