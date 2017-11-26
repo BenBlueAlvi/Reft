@@ -167,7 +167,7 @@ public class BattleTab extends Tab{
 	}
 	
 	public void open(Entity p){
-		
+		super.open(p);
 		if (!isOpen){
 			selectedAbil = null;
 			player.entity = p;
@@ -182,8 +182,7 @@ public class BattleTab extends Tab{
 				this.addActor(newContainer);
 				
 			}
-			this.setVisible(true);
-			isOpen = true;
+				isOpen = true;
 		
 	
 		}
@@ -255,7 +254,7 @@ public class BattleTab extends Tab{
 		for (int row = 0; row < map.length; row++){
 			for (int col = 0; col < map[0].length; col++){	
 		
-				map[row][col].setPosition(ReftGame.getViewWidth()/3 + 12 + (col + mapOffsetX) * 16,ReftGame.getViewHeight()- (row + mapOffsetY) * 16 - 55 + 13);
+				map[row][col].setPosition(ReftGame.getViewWidth()/3 + 12 + (col + mapOffsetX) * 16, ReftGame.getViewHeight()- (row + mapOffsetY) * 16 - 55 + 13);
 				if (map[row][col].getX() < ReftGame.getViewWidth()/3 + 12 || map[row][col].getX() > ReftGame.getViewWidth()/3 + 12 + 16 * maxMapX || 
 						map[row][col].getY() < ReftGame.getViewHeight() - 55 + 13 || map[row][col].getY() > ReftGame.getViewHeight()- (maxMapY) * 16 - 55 + 13){
 					map[row][col].setVisible(true);

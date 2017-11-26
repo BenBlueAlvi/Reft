@@ -16,7 +16,7 @@ public abstract class Tab extends BaseActor{
 		super("assets/blackground.png");
 		background.setColor(Color.BLACK);
 		// TODO Auto-generated constructor stub
-		
+		this.setVisible(false);
 	}
 	
 	
@@ -42,7 +42,10 @@ public abstract class Tab extends BaseActor{
      * The tab will display on top of all other open tabs
      * @param p the player entity
      */
-	public void open(Entity p){}
+	public void open(Entity p){
+		this.setVisible(true);
+		
+	}
 	
 	
 	/**

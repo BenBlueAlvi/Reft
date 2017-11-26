@@ -18,19 +18,7 @@ public class Entity {
 	public int stamina;
 	public int maxStamina;
 	
-	public int strength;
-	
-	public int acc;
-	public int dodge;
-	
-	public int vul;
-	public int crit;
-	
-	public int will;
-	
-	public int sanity;
-	
-	public int reputation;
+	private int[] stats = new int[Stats.values().length];
 	
 	public String name;
 	public String title;
@@ -43,7 +31,7 @@ public class Entity {
 	public ArrayList<Ability> abilities = new ArrayList<Ability>();
 	public ArrayList<Item> inventory = new ArrayList<Item>();
 	public HashMap<Slots, Item> equipment = new HashMap<Slots, Item>();
-	public int[] skills = new int[Skills.values().length];
+	private int[] skills = new int[Skills.values().length];
 	
 	public int[] battlePos = {0,0};
 	
@@ -118,6 +106,21 @@ public class Entity {
 		return 0;
 		
 		
+	}
+	
+	
+	public int getSkill(Skills skill){
+		return this.skills[skill.ordinal()];
+	}
+	public void setSkill(Skills skill, int num){
+		this.skills[skill.ordinal()] = num;
+	}
+	
+	public int getStat(Stats stat){
+		return this.skills[stat.ordinal()];
+	}
+	public void setStat(Stats stat, int num){
+		this.skills[stat.ordinal()] = num;
 	}
 	
 
