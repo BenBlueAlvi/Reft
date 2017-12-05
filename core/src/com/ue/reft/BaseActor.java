@@ -2,6 +2,7 @@ package com.ue.reft;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -135,6 +136,7 @@ public class BaseActor extends Group{
 		batch.setColor(c.r, c.g, c.b, c.a);
 		if (isVisible()){
 			batch.draw(region, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+		
 		}
 		super.draw(batch, parentAlpha);
 	}

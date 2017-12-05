@@ -6,11 +6,13 @@ import java.util.HashMap;
 import com.ue.reft.BodyParts;
 import com.ue.reft.Entity;
 import com.ue.reft.Skills;
+import com.ue.reft.Stats;
 import com.ue.reft.abilities.Ability;
 
 public abstract class Race {
 	
-	protected HashMap<Skills, Integer> scoreBonuses;
+	protected HashMap<Stats, Integer> statBonuses;
+	protected HashMap<Skills, Integer> skillBonuses;
 	protected Ability[] abilityBonuses;
 	
 	public String name;
@@ -27,7 +29,8 @@ public abstract class Race {
 	public Race(){
 		this.name = "";
 		this.desc = "";
-		scoreBonuses = new HashMap<Skills, Integer>();
+		statBonuses = new HashMap<Stats, Integer>();
+		skillBonuses = new HashMap<Skills, Integer>();
 		abilityBonuses = new Ability[2];
 		Race.allRaces.add(this);
 	}
@@ -37,13 +40,21 @@ public abstract class Race {
 			e.abilities.add(a);
 		}
 		
+		for (Stats s : this.statBonuses.keySet()){
+			e.setStat(s, this.statBonuses.get(s));
+		}
+		
+		for (Skills s : this.skillBonuses.keySet()){
+			e.setSkill(s, this.skillBonuses.get(s));
+		}
+		
 	
 		
 	}
 	/*head, torso, rightLeg, leftLeg, rightFoot, leftFoot, rightArm, leftArm, rightHand, leftHand, neck;*/
 	
 	/**
-	 * sets the hit chances for each body part
+	 * sets the hit chances for each body part, must add up to 100
 	 * @param head int % chance of being hit
 	 * @param torso int % chance of being hit
 	 * @param rightLeg int % chance of being hit
@@ -70,5 +81,11 @@ public abstract class Race {
 		this.bodyPartHitChances[9] = leftHand;
 		this.bodyPartHitChances[10] = neck;
 	}
+	
+	protected void setBodyPartHitChances(int[] chances){
+		this.bodyPartHitChances = chances;
+	
+	}
+	
 	
 }

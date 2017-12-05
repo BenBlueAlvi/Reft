@@ -5,6 +5,7 @@ public enum BodyParts {
 	
 	
 	public Slots slot;
+	public static int[] humanoid = {10, 25, 15, 15, 3, 3, 11, 11, 3, 3, 1};
 	
 	static {
 		head.slot = Slots.HEAD;
