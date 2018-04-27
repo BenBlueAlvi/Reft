@@ -173,7 +173,7 @@ public class BattleTab extends Tab{
 			selectedAbil = null;
 			player.entity = p;
 			this.abilities = new  ArrayList<Container<Ability>>();
-			System.out.println("hi");
+	
 			for (int i = 0; i < p.abilities.size(); i++){
 				Container<Ability> newContainer = new Container<Ability>(p.abilities.get(i), 10f, ReftGame.getViewHeight() -35 - (float) i * 16);
 		
@@ -191,7 +191,7 @@ public class BattleTab extends Tab{
 	}
 	
 	public void close(){
-		System.out.println("hi");
+		
 		for (Container<Ability> c : abilities){
 			c.remove();
 		}
@@ -248,8 +248,7 @@ public class BattleTab extends Tab{
 		else if (player.pos.y > maxMapY + mapOffsetY){
 			mapOffsetY += 1;
 		}
-		
-		System.out.println(mapOffsetX);
+	
 		
 		//map scrolling update
 		for (int row = 0; row < map.length; row++){
@@ -304,7 +303,7 @@ public class BattleTab extends Tab{
 
 	private void playerTurn(){
 		if (selectedAbil != null){
-			
+			//update text
 			this.abilCost.setText("Cost: " + selectedAbil.getThing().cost + " " + selectedAbil.getThing().type.useAbv);
 			this.abilTimeCost.setText("Time Cost: " + selectedAbil.getThing().timeCost);
 			this.abilDesc.setText(selectedAbil.getThing().name);
@@ -314,7 +313,7 @@ public class BattleTab extends Tab{
 			//calculate tiles in range
 			if (selectedAbil.getThing().name.equals("Move")){
 				tilesInRange = this.getTilesInRange(player.center.x, player.center.y, walkDist * 16);
-				System.out.println(walkDist);
+				
 			} else {
 				tilesInRange = this.getTilesInRange(player.center.x, player.center.y, selectedAbil.getThing().range * 16);
 			
@@ -326,7 +325,7 @@ public class BattleTab extends Tab{
 				for (int col = 0; col < map[0].length; col++){	
 			
 					map[row][col].setMoveHighlight(false);
-					map[row][col].setAttackable(false);
+					map[row][col].setAttackable(false, 0);
 					
 				}
 			}
@@ -334,22 +333,20 @@ public class BattleTab extends Tab{
 			//highlight tiles
 			
 			for (Tile t : tilesInRange){
-				
-				if (this.calculateCoverFrom(map[(int) player.pos.y][(int) player.pos.x].getX(), map[(int) player.pos.y][(int) player.pos.x].getY(), t.getX(),t.getY()) < 4){
+				int cover = this.calculateCoverFrom(map[(int) player.pos.y][(int) player.pos.x].getX(), map[(int) player.pos.y][(int) player.pos.x].getY(), t.getX(),t.getY());
+				if (cover < 4){
 					if (selectedAbil.getThing().name == "Move"){
 						
 				
 					} else {
-						t.setAttackable(true);
+						t.setAttackable(true, cover);
 					}
-				} else {
-				
-				}
+				} 
 			}
 			
 			
 			//Mark adjs moveable
-			if (selectedAbil.getThing().name == "Move"){
+			if (selectedAbil.getThing().name.equals("Move")){
 				
 				for (int row = 0; row < map.length; row++){
 					for (int col = 0; col < map[0].length; col++){	
@@ -364,26 +361,7 @@ public class BattleTab extends Tab{
 					
 				}
 			}
-			
-			//remove other highlights
-			
-			if (selectedAbil.getThing().name == "Move"){
-				for (int row = 0; row < map.length; row++){
-					for (int col = 0; col < map[0].length; col++){	
-						map[row][col].setAttackable(false);
-						
-					}
-				}
-			} else {
-				
-				for (int row = 0; row < map.length; row++){
-					for (int col = 0; col < map[0].length; col++){	
-			
-						map[row][col].setMoveHighlight(false);
-						
-					}
-				}
-			}
+	
 		
 				
 			
@@ -392,11 +370,13 @@ public class BattleTab extends Tab{
 			for (int row = 0; row < map.length; row++){
 				for (int col = 0; col < map[0].length; col++){	
 					if (map[row][col].getBoundingPolygon().contains(Gdx.input.getX(),ReftGame.getViewHeight() - Gdx.input.getY())){
-						
-						Pos[] poses = selectedAbil.getThing().telegraph.getHitPositions(col, row);
-						for (int i = 0; i < poses.length; i++){
-							map[(int) poses[i].y][(int) poses[i].x].setTelegraph(true);
+						if (selectedAbil.getThing().telegraph != null) {
+							Pos[] poses = selectedAbil.getThing().telegraph.getHitPositions(col, row);
+							for (int i = 0; i < poses.length; i++){
+								map[(int) poses[i].y][(int) poses[i].x].setTelegraph(true);
+							}
 						}
+						
 						
 						if (Gdx.input.justTouched()){
 							if (selectedAbil.getThing().name == "Move" && map[row][col].isMoveable && map[row][col].isStandable){
@@ -423,7 +403,7 @@ public class BattleTab extends Tab{
 			for (int row = 0; row < map.length; row++){
 				for (int col = 0; col < map[0].length; col++){	
 			
-					map[row][col].setAttackable(false);
+					map[row][col].setAttackable(false, 0);
 					map[row][col].setMoveHighlight(false);
 					
 				}

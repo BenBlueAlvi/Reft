@@ -2,6 +2,7 @@ package com.ue.reft.tabs.battleTab;
 
 import com.badlogic.gdx.graphics.Color;
 import com.ue.reft.BaseActor;
+import com.ue.reft.Utils;
 
 public abstract class Tile extends BaseActor{
 	
@@ -13,6 +14,7 @@ public abstract class Tile extends BaseActor{
 	public boolean isHit;
 	public Dot dot;
 	public char id;
+	public int cover;
 	private Color walkHighlight = new Color(0xadccff);
 	private Color moveHighlight = new Color(0xbeeeff);
 	private Color hitHighlight = Color.ORANGE;
@@ -51,9 +53,10 @@ public abstract class Tile extends BaseActor{
      * Sets the if the player can attack a dot on this tile
      * @param  attackAble the boolean value for if the tile is attackable
      */
-	public void setAttackable(boolean attackAble){
+	public void setAttackable(boolean attackAble, int cover){
 		if (attackAble){
-			this.setColor(attackHighlight);
+			this.setColor(Utils.getCoverColor(cover));
+			this.cover = cover;
 		} else {
 			if (!isMoveable){
 				this.setColor(Color.WHITE);
@@ -61,6 +64,7 @@ public abstract class Tile extends BaseActor{
 			if (!isHit){
 				this.setColor(Color.WHITE);
 			}
+			this.cover = 4;
 			
 		}
 		

@@ -117,10 +117,10 @@ public class Entity {
 	}
 	
 	public int getStat(Stats stat){
-		return this.skills[stat.ordinal()];
+		return this.stats[stat.ordinal()];
 	}
 	public void setStat(Stats stat, int num){
-		this.skills[stat.ordinal()] = num;
+		this.stats[stat.ordinal()] = num;
 	}
 	
 

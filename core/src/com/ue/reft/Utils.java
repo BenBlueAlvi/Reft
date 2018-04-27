@@ -2,6 +2,7 @@ package com.ue.reft;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
@@ -20,7 +21,7 @@ public class Utils {
 	
 	
 	public static int damageEquation(Entity offender, Entity defender, int cover, Ability abil){
-		System.out.println(cover);
+		
 		int damage = offender.getStat(Stats.strength);
 		int totalPers = 0;
 		if (offender.equipment.get(Slots.MAINHAND) != null){
@@ -40,24 +41,33 @@ public class Utils {
 		}
 		damage *= (totalPers / 100) + 1;
 		
+		//calc hit
 		
-		
-		BodyParts bodyPartHit = defender.calcHitBodyPart();
-		
-		if (defender.equipment.get(bodyPartHit.slot) != null){
-			Item equipedItem = defender.equipment.get(bodyPartHit.slot);
+		if (Roll.roll("1d20") + offender.getStat(Stats.acc) - (2 * cover) > Roll.roll("1d20") + defender.getStat(Stats.reaction)) {
+			System.out.println("hit");
+			//deal damage
+			BodyParts bodyPartHit = defender.calcHitBodyPart();
 			
-			int armorDamage = (int) (damage * equipedItem.absorbsion);
-			int entityDamage = (int) (damage * (1-equipedItem.absorbsion));
-			
-			defender.health -= entityDamage;
-			equipedItem.durability -= armorDamage;
+			if (defender.equipment.get(bodyPartHit.slot) != null){
+				Item equipedItem = defender.equipment.get(bodyPartHit.slot);
+				
+				int armorDamage = (int) (damage * equipedItem.absorbsion);
+				int entityDamage = (int) (damage * (1-equipedItem.absorbsion));
+				
+				defender.health -= entityDamage;
+				equipedItem.durability -= armorDamage;
+			}
+		} else {
+			System.out.println("miss!");
+			damage = 0;
 		}
 		
 	
 		
+	
 		
-		return MathUtils.random(1, 3);
+		
+		return damage;
 		
 	}
 	
@@ -143,6 +153,12 @@ public class Utils {
 			sr.line(x, y + i * 16, x+width, y+ i * 16);
 		}
 		sr.end();
+	}
+	
+	public static Color getCoverColor(int cover) {
+	
+	
+		return new Color(1f, ((float)(cover) /4), ((float)(cover)/4), 0.5f);
 	}
 	
 	

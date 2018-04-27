@@ -10,6 +10,7 @@ public class Move extends Ability{
 		this.range = 5;
 		this.name = "Move";
 		this.timeCost = 1;
+		this.telegraph = null;
 	}
 
 }

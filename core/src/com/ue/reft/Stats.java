@@ -7,7 +7,7 @@ public enum Stats {
 	
 	flexability, strength, coordination, recovery, perception,
 	
-	crit, vul, dodge, acc, 
+	reaction, vul, acc, 
 	
 	reputation, sanity;
 	
