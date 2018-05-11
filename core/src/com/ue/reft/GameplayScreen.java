@@ -94,6 +94,7 @@ public class GameplayScreen implements Screen{
 		Player = new Entity(new Human());
 		Player.abilities.add(new BasicAttack(Player));
 		Player.abilities.add(new Move(Player));
+		Player.setStat(Stats.strength, 10);
 		Player.race = new Human();
 		
 	
