@@ -6,6 +6,7 @@ import java.util.HashMap;
 import com.badlogic.gdx.math.MathUtils;
 import com.ue.reft.abilities.Ability;
 import com.ue.reft.items.Item;
+import com.ue.reft.items.ItemEquipable;
 import com.ue.reft.races.Race;
 
 public class Entity {
@@ -29,8 +30,11 @@ public class Entity {
 	public int lvl;
 
 	public ArrayList<Ability> abilities = new ArrayList<Ability>();
-	public ArrayList<Item> inventory = new ArrayList<Item>();
-	public HashMap<Slots, Item> equipment = new HashMap<Slots, Item>();
+	private ArrayList<Item> inventory = new ArrayList<Item>();
+	private HashMap<Slots, ItemEquipable> equipment = new HashMap<Slots, ItemEquipable>();
+	
+	private Fonts storedFont;
+	
 	private int[] skills = new int[Skills.values().length];
 	
 	public int[] battlePos = {0,0};
@@ -122,6 +126,24 @@ public class Entity {
 	public void setStat(Stats stat, int num){
 		this.stats[stat.ordinal()] = num;
 	}
+	
+	public void obtainItem(Item e) {
+		this.inventory.add(e);
+		e.onObtain(this);
+	}
+	
+	public ArrayList<Item> getInventory() {
+		return this.inventory;
+	}
+	
+	public void equip(ItemEquipable e) {
+		this.equipment.put(e.slot, e);
+	}
+	
+	public HashMap<Slots, ItemEquipable> getEquips(){
+		return this.equipment;
+	}
+	
 	
 
 	

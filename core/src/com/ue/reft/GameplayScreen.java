@@ -22,6 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.ue.reft.abilities.BasicAttack;
 import com.ue.reft.abilities.Move;
 import com.ue.reft.items.Item;
+import com.ue.reft.items.ItemConsumable;
+import com.ue.reft.items.ItemEquipable;
 import com.ue.reft.races.Human;
 import com.ue.reft.tabs.InventoryTab;
 import com.ue.reft.tabs.battleTab.BattleTab;
@@ -115,7 +117,9 @@ public class GameplayScreen implements Screen{
 		Player.battlePos[1] = 4;
 		battleTab.beginBattle(map, Player, testEnm, testEnm2);
 		
-	
+		Player.obtainItem(new ItemEquipable("Sword"));
+		Player.obtainItem(new ItemEquipable("hat"));
+		Player.obtainItem(new ItemConsumable("apple"));
 		
 		
 		theWorld = new World();

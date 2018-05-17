@@ -27,7 +27,7 @@ public class BasicAttack extends Ability{
 	
 	@Override
 	public void useOn(Entity target){
-		Item usedWeapon = owner.equipment.get(Slots.MAINHAND);
+		Item usedWeapon = owner.getEquips().get(Slots.MAINHAND);
 	
 		
 	

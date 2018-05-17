@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.ue.reft.abilities.Ability;
 import com.ue.reft.items.Item;
+import com.ue.reft.items.ItemEquipable;
 
 public class Utils {
 	
@@ -24,16 +25,16 @@ public class Utils {
 		
 		int damage = offender.getStat(Stats.strength);
 		int totalPers = 0;
-		if (offender.equipment.get(Slots.MAINHAND) != null){
-			damage += offender.equipment.get(Slots.MAINHAND).damage.getPoint(Utils.roll100());
-			damage += offender.equipment.get( Slots.MAINHAND).getStat(Stats.strength);
+		if (offender.getEquips().get(Slots.MAINHAND) != null){
+			damage += offender.getEquips().get(Slots.MAINHAND).damage.getPoint(Utils.roll100());
+			damage += offender.getEquips().get( Slots.MAINHAND).getStat(Stats.strength);
 			
 		}
 		
 		for (Slots s : Slots.values()){
 			if (s != Slots.MAINHAND && s != Slots.OFFHAND){
-				if (offender.equipment.get(s) != null){
-					damage += offender.equipment.get(s).getStat(Stats.strength);
+				if (offender.getEquips().get(s) != null){
+					damage += offender.getEquips().get(s).getStat(Stats.strength);
 					
 				}
 				
@@ -48,8 +49,8 @@ public class Utils {
 			//deal damage
 			BodyParts bodyPartHit = defender.calcHitBodyPart();
 			
-			if (defender.equipment.get(bodyPartHit.slot) != null){
-				Item equipedItem = defender.equipment.get(bodyPartHit.slot);
+			if (defender.getEquips().get(bodyPartHit.slot) != null){
+				ItemEquipable equipedItem = defender.getEquips().get(bodyPartHit.slot);
 				
 				int armorDamage = (int) (damage * equipedItem.absorbsion);
 				int entityDamage = (int) (damage * (1-equipedItem.absorbsion));

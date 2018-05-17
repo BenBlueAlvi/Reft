@@ -19,6 +19,7 @@ import com.ue.reft.ReftGame;
 import com.ue.reft.Slots;
 import com.ue.reft.Text;
 import com.ue.reft.items.Item;
+import com.ue.reft.items.ItemEquipable;
 
 public class InventoryTab extends Tab{
 	
@@ -72,8 +73,8 @@ public class InventoryTab extends Tab{
 			selectedItem = null;
 			
 			this.storedItems = new  ArrayList<Container<Item>>();
-			for (int i = 0; i < p.inventory.size(); i++){
-				Container<Item> newContainer = new Container<Item>(p.inventory.get(i), 10f, ReftGame.getViewHeight()- 45 - (float) i * 16);
+			for (int i = 0; i < p.getInventory().size(); i++){
+				Container<Item> newContainer = new Container<Item>(p.getInventory().get(i), 10f, ReftGame.getViewHeight()- 45 - (float) i * 16);
 		
 				this.storedItems.add(newContainer);
 				
@@ -168,20 +169,21 @@ public class InventoryTab extends Tab{
 			
 			if (equipTitles[i].getBoundingPolygon().contains(Gdx.input.getX(),ReftGame.getViewHeight() - Gdx.input.getY()) && Gdx.input.justTouched()){
 
-				if (selectedItem != null){
+				if (selectedItem != null && selectedItem.getThing() instanceof ItemEquipable){
 					equips.get(i).setThing(selectedItem.getThing());
-					p.equipment.put(Slots.values()[i], selectedItem.getThing());
+					
+					p.getEquips().put(Slots.values()[i], (ItemEquipable) selectedItem.getThing());
 					storedItems.remove(selectedItem);
-					p.inventory.remove(selectedItem.getThing());
+					p.getInventory().remove(selectedItem.getThing());
 					this.removeActor(selectedItem);
 					selectedItem = null;
 				} else { 
 				
 					if (equips.get(i).getThing() != null){
-						p.equipment.put(Slots.values()[i], null);
+						p.getEquips().put(Slots.values()[i], null);
 						Container<Item> c = new Container<Item>(equips.get(i).getThing(), 10f, ReftGame.getViewHeight()- 45 - (float) storedItems.size() * 16);		
 						storedItems.add(c);
-						p.inventory.add(c.getThing());
+						p.getInventory().add(c.getThing());
 						this.addActor(c);
 						equips.get(i).setThing(null);
 					
