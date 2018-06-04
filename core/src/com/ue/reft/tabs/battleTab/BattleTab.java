@@ -108,6 +108,7 @@ public class BattleTab extends Tab{
 		}
 		
 		this.map = map;
+		updateLighting();
 		for (int row = 0; row < map.length; row++){
 			for (int col = 0; col < map[0].length; col++){
 			
@@ -142,6 +143,9 @@ public class BattleTab extends Tab{
 				
 			}
 		}
+		newMap[10][4].tileObjects.add(new TileObject(Utils.loadTexture("moveHighlight.png")));
+		newMap[10][6].tileObjects.add(new TileObject(Utils.loadTexture("moveHighlight.png")));
+		
 		return newMap;
 	}
 	
@@ -302,6 +306,7 @@ public class BattleTab extends Tab{
 	}
 
 	private void playerTurn(){
+		
 		if (selectedAbil != null){
 			//update text
 			this.abilCost.setText("Cost: " + selectedAbil.getThing().cost + " " + selectedAbil.getThing().type.useAbv);
@@ -384,6 +389,8 @@ public class BattleTab extends Tab{
 								walkDist -= 1;
 								timePoints -= selectedAbil.getThing().timeCost;
 								
+								
+								
 							} else {
 								if (map[row][col].isAttackable && map[row][col].dot != null){
 									int dam = Utils.damageEquation(player.entity, map[row][col].dot.entity, calculateCoverFrom(map[(int) player.pos.y][(int) player.pos.y].getX(), map[(int) player.pos.y][(int) player.pos.y].getY(), map[row][col].getX(), map[row][col].getY()), selectedAbil.getThing());
@@ -413,6 +420,7 @@ public class BattleTab extends Tab{
 			this.abilDesc.setText("");
 			this.abilTimeCost.setText("");
 		}
+		//updateLighting();
 	}
 	
 	@Override
@@ -494,7 +502,8 @@ public class BattleTab extends Tab{
 	private ArrayList<Tile> getTilesInRange(float x, float y, int range){
 		ArrayList<Tile> tiles = new ArrayList<Tile>();
 		
-		Circle rangeCircle = new Circle(x, y, selectedAbil.getThing().range * 16);
+		Circle rangeCircle = new Circle(x, y, range * 16);
+		
 		
 		for (int row = 0; row < map.length; row++){
 			for (int col = 0; col < map[0].length; col++){	
@@ -509,6 +518,63 @@ public class BattleTab extends Tab{
 	
 	public static void scoll(int amount){
 		printer.scrolled += amount;
+	}
+	
+	private  ArrayList<Tile> getTilesAtRadius(int x, int y, int radius) {
+		ArrayList<Tile> tiles = new ArrayList<Tile>();
+		for (int row = 0; row < map.length; row++){
+			for (int col = 0; col < map[0].length; col++){	
+				for (int i = 0; i < 360; i++) {
+					if (map[row][col].getBoundingRectangle().contains(Utils.polarToRect(radius*16, i, map[x][y].center))) {
+						if (!tiles.contains(map[row][col])) {
+							tiles.add(map[row][col]);
+						}
+						
+					}
+				}
+				
+				
+			}
+		}
+		return tiles;
+		
+		
+			
+	}
+	
+	public void updateLighting() {
+		ArrayList<Tile> tiles = new ArrayList<Tile>();
+		System.out.println("UpdatingLighting...");
+		for (int row = 0; row < map.length; row++){
+			for (int col = 0; col < map[0].length; col++){	
+				map[row][col].resetLighting();
+			}
+		}
+		
+		for (int row = 0; row < map.length; row++){
+			for (int col = 0; col < map[0].length; col++){	
+			
+			
+				
+				for (TileObject to : map[row][col].tileObjects) {
+				
+					for (int i = 0; i < to.lightStrength; i++) {
+						tiles =	getTilesAtRadius(row, col, i);
+						
+						for (Tile t : tiles) {
+							System.out.println("SettingLighting...");
+							t.addLighting(1.0f - (float) (1.0f/(to.lightStrength)) * i);
+							
+						}
+						
+					}
+					
+				}
+				map[row][col].updateLighting();
+				System.out.println("UpdatingTileLighting...");
+			}
+		}
+		
 	}
 	
 }

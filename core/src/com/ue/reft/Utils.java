@@ -2,10 +2,15 @@ package com.ue.reft;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.ue.reft.abilities.Ability;
 import com.ue.reft.items.Item;
 
@@ -17,6 +22,13 @@ public class Utils {
 	}
 	public static int roll100(){
 		return MathUtils.random(0, 100);
+	}
+	public static Vector2 polarToRect(int r, double angle, Vector2 origin) {
+		Vector2 v = new Vector2();
+		v.x = (float) (r * Math.cos(Math.toRadians(angle))) + origin.x;
+		v.y = (float) (r * Math.sin(Math.toRadians(angle))) + origin.y;
+
+		return v;
 	}
 	
 	
@@ -46,27 +58,36 @@ public class Utils {
 		if (Roll.roll("1d20") + offender.getStat(Stats.acc) - (2 * cover) > Roll.roll("1d20") + defender.getStat(Stats.reaction)) {
 			System.out.println("hit");
 			//deal damage
-			BodyParts bodyPartHit = defender.calcHitBodyPart();
 			
+			BodyParts bodyPartHit = defender.calcHitBodyPart();
+			int armorDamage = 0;
+			int entityDamage = 0;
+			//check if armor is in slot
 			if (defender.equipment.get(bodyPartHit.slot) != null){
 				Item equipedItem = defender.equipment.get(bodyPartHit.slot);
 				
-				int armorDamage = (int) (damage * equipedItem.absorbsion);
-				int entityDamage = (int) (damage * (1-equipedItem.absorbsion));
+				//check if hit armor
+				if (equipedItem.coverage < Utils.roll100()) {
+					entityDamage = damage;
+				} else {
+					//damage armor based on absorption
+					 armorDamage = (int) (damage * equipedItem.absorbsion);
+					entityDamage = (int) (damage * (1-equipedItem.absorbsion));
+					equipedItem.durability -= armorDamage;
+				}
 				
-				defender.health -= entityDamage;
-				equipedItem.durability -= armorDamage;
+				
+				
+			} else {
+				entityDamage = damage;
 			}
+			defender.health -= entityDamage;
+			
 		} else {
 			System.out.println("miss!");
 			damage = 0;
 		}
-		
-	
-		
-	
-		
-		
+
 		return damage;
 		
 	}
@@ -158,8 +179,34 @@ public class Utils {
 	public static Color getCoverColor(int cover) {
 	
 	
-		return new Color(1f, ((float)(cover) /4), ((float)(cover)/4), 0.5f);
+		return new Color(1f, ((float)(cover) /4), ((float)(cover)/4), 1f);
 	}
+	
+	public static Texture loadTexture(String path) {
+		try {
+			Texture t = new Texture(Gdx.files.internal("assets/" + path + ".png"));
+			return t;
+
+		} catch (Exception GdxRuntimeException) {
+			System.out.println("Error: Could not find: " + path + " substituting...");
+			Texture t = new Texture(Gdx.files.internal("assets/missingTex.png"));
+			return t;
+		}
+	}
+	
+	public static Animation<TextureRegion> loadAnimation(String path, int cols, int rows){
+		Texture sheet = Utils.loadTexture(path);
+		TextureRegion[][] map = TextureRegion.split(sheet, sheet.getWidth()/cols, sheet.getHeight()/rows);
+		TextureRegion[] frames = new TextureRegion[cols * rows];
+		int index = 0;
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				frames[index++] = map[i][j];
+			}
+		}
+		return new Animation<TextureRegion>(0.025f, frames);
+	}
+
 	
 	
 }

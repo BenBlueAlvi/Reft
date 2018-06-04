@@ -27,6 +27,8 @@ public class Entity {
 	public int powerLevel;
 	public int xp;
 	public int lvl;
+	
+	public Direction facing;
 
 	public ArrayList<Ability> abilities = new ArrayList<Ability>();
 	public ArrayList<Item> inventory = new ArrayList<Item>();
