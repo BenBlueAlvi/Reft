@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.ue.reft.abilities.Ability;
 import com.ue.reft.items.Item;
+import com.ue.reft.items.ItemEquipable;
 
 public class Utils {
 	
@@ -36,16 +37,16 @@ public class Utils {
 		
 		int damage = offender.getStat(Stats.strength);
 		int totalPers = 0;
-		if (offender.equipment.get(Slots.MAINHAND) != null){
-			damage += offender.equipment.get(Slots.MAINHAND).damage.getPoint(Utils.roll100());
-			damage += offender.equipment.get( Slots.MAINHAND).getStat(Stats.strength);
+		if (offender.getEquips().get(Slots.MAINHAND) != null){
+			damage += offender.getEquips().get(Slots.MAINHAND).damage;
+			damage += offender.getEquips().get( Slots.MAINHAND).getStat(Stats.strength);
 			
 		}
 		
 		for (Slots s : Slots.values()){
 			if (s != Slots.MAINHAND && s != Slots.OFFHAND){
-				if (offender.equipment.get(s) != null){
-					damage += offender.equipment.get(s).getStat(Stats.strength);
+				if (offender.getEquips().get(s) != null){
+					damage += offender.getEquips().get(s).getStat(Stats.strength);
 					
 				}
 				
@@ -59,12 +60,16 @@ public class Utils {
 			System.out.println("hit");
 			//deal damage
 			
+
 			BodyParts bodyPartHit = defender.calcHitBodyPart();
 			int armorDamage = 0;
 			int entityDamage = 0;
 			//check if armor is in slot
-			if (defender.equipment.get(bodyPartHit.slot) != null){
-				Item equipedItem = defender.equipment.get(bodyPartHit.slot);
+
+
+			if (defender.getEquips().get(bodyPartHit.slot) != null){
+				ItemEquipable equipedItem = defender.getEquips().get(bodyPartHit.slot);
+
 				
 				//check if hit armor
 				if (equipedItem.coverage < Utils.roll100()) {
@@ -93,33 +98,6 @@ public class Utils {
 	}
 	
 
-	 public class DamageCurve {
-
-		 double rangeTop = 2, rangeBottom = 0;
-		 int pos;
-
-		 public DamageCurve(double rangeTop, double rangeBottom) {
-			 this.rangeTop = rangeTop;
-			 this.rangeBottom = rangeBottom;
-			
-		 }
-
-
-		 public double getPoint(int pos){
-			 double output = 0.0, last = 0.0, current = 0.0;
-
-			 for (int i = 0; i < pos; i++){
-				 current = .5 * ((Math.exp(-(2/625)*Math.pow(i-50, 2))) * (.319254 - .00638308 * i));
-				 output += .5 * (current + last);
-				 last = current;
-			 }
-
-			 output = (output * (rangeTop - rangeBottom)) + rangeBottom;
-	
-			 return output;
-		 }
-
-	}
 	 
 	 public static ArrayList<Integer[]> circlePoints(int in){
 		 ArrayList<Integer[]> output = new ArrayList<Integer[]>();

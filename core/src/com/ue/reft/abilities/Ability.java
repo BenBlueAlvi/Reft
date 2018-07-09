@@ -4,7 +4,7 @@ import com.ue.reft.Entity;
 import com.ue.reft.Skills;
 import com.ue.reft.Sources;
 import com.ue.reft.Telegraph;
-import com.ue.reft.Utils.DamageCurve;
+
 
 public abstract class Ability {
 	
@@ -16,7 +16,7 @@ public abstract class Ability {
 	public int AOE;
 	public int cost;
 	public Sources type;
-	public DamageCurve damage;
+	
 	public int xp;
 	public int timeCost;
 	

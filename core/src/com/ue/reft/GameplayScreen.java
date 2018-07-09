@@ -22,6 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.ue.reft.abilities.BasicAttack;
 import com.ue.reft.abilities.Move;
 import com.ue.reft.items.Item;
+import com.ue.reft.items.ItemConsumable;
+import com.ue.reft.items.ItemEquipable;
 import com.ue.reft.races.Human;
 import com.ue.reft.tabs.InventoryTab;
 import com.ue.reft.tabs.battleTab.BattleTab;
@@ -94,6 +96,7 @@ public class GameplayScreen implements Screen{
 		Player = new Entity(new Human());
 		Player.abilities.add(new BasicAttack(Player));
 		Player.abilities.add(new Move(Player));
+		Player.setStat(Stats.strength, 10);
 		Player.race = new Human();
 		
 	
@@ -113,8 +116,10 @@ public class GameplayScreen implements Screen{
 		Player.battlePos[0] = 4;
 		Player.battlePos[1] = 4;
 		battleTab.beginBattle(map, Player, testEnm, testEnm2);
+		Item sword = new ItemEquipable("Sword");
+		sword.setDesc("It's a cool Sword");
+		Player.obtainItem(sword);
 		
-	
 		
 		
 		theWorld = new World();
